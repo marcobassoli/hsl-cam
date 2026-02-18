@@ -155,6 +155,60 @@
             right: 0;
         }
 
+        .saturation-gradient-bar {
+            height: 20px;
+            border-radius: 3px;
+            background: linear-gradient(
+                to right,
+                hsl(200, 0%, 50%),
+                hsl(200, 20%, 50%),
+                hsl(200, 40%, 50%),
+                hsl(200, 60%, 50%),
+                hsl(200, 80%, 50%),
+                hsl(200, 100%, 50%)
+            );
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .lightness-gradient-bar {
+            height: 20px;
+            border-radius: 3px;
+            background: linear-gradient(
+                to right,
+                hsl(0, 0%, 0%),
+                hsl(0, 0%, 25%),
+                hsl(0, 0%, 50%),
+                hsl(0, 0%, 75%),
+                hsl(0, 0%, 100%)
+            );
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .saturation-range-overlay,
+        .lightness-range-overlay {
+            position: absolute;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            transition: all 0.05s linear;
+        }
+
+        .saturation-range-overlay-left,
+        .lightness-range-overlay-left {
+            left: 0;
+        }
+
+        .saturation-range-overlay-right,
+        .lightness-range-overlay-right {
+            right: 0;
+        }
+
         input[type="range"] {
             flex: 1;
             height: 6px;
@@ -352,6 +406,10 @@
                             <span id="satMaxVal">100</span>
                         </div>
                     </div>
+                    <div class="saturation-gradient-bar">
+                        <div class="saturation-range-overlay saturation-range-overlay-left" id="satOverlayLeft"></div>
+                        <div class="saturation-range-overlay saturation-range-overlay-right" id="satOverlayRight"></div>
+                    </div>
                     <div class="slider-inputs">
                         <input type="range" id="satMin" min="0" max="100" value="0">
                         <input type="range" id="satMax" min="0" max="100" value="100">
@@ -366,6 +424,10 @@
                             <span>-</span>
                             <span id="lightMaxVal">100</span>
                         </div>
+                    </div>
+                    <div class="lightness-gradient-bar">
+                        <div class="lightness-range-overlay lightness-range-overlay-left" id="lightOverlayLeft"></div>
+                        <div class="lightness-range-overlay lightness-range-overlay-right" id="lightOverlayRight"></div>
                     </div>
                     <div class="slider-inputs">
                         <input type="range" id="lightMin" min="0" max="100" value="0">
@@ -584,17 +646,43 @@
             document.getElementById('lightMaxVal').textContent = lightMax.value;
 
             // Update hue range overlays
-            const overlayLeft = document.getElementById('hueOverlayLeft');
-            const overlayRight = document.getElementById('hueOverlayRight');
+            const hueOverlayLeft = document.getElementById('hueOverlayLeft');
+            const hueOverlayRight = document.getElementById('hueOverlayRight');
             const hMin = parseFloat(hueMin.value);
             const hMax = parseFloat(hueMax.value);
             const hueWidthPercent = (100 / 360);
 
-            const leftPercent = hMin * hueWidthPercent;
-            const rightPercent = 100 - (hMax * hueWidthPercent);
+            let hLeftPercent = hMin * hueWidthPercent;
+            let hRightPercent = 100 - (hMax * hueWidthPercent);
 
-            overlayLeft.style.width = leftPercent + '%';
-            overlayRight.style.width = rightPercent + '%';
+            hueOverlayLeft.style.width = hLeftPercent + '%';
+            hueOverlayRight.style.width = hRightPercent + '%';
+
+            // Update saturation range overlays
+            const satOverlayLeft = document.getElementById('satOverlayLeft');
+            const satOverlayRight = document.getElementById('satOverlayRight');
+            const sMin = parseFloat(satMin.value);
+            const sMax = parseFloat(satMax.value);
+            const satWidthPercent = (100 / 100);
+
+            let sLeftPercent = sMin * satWidthPercent;
+            let sRightPercent = 100 - (sMax * satWidthPercent);
+
+            satOverlayLeft.style.width = sLeftPercent + '%';
+            satOverlayRight.style.width = sRightPercent + '%';
+
+            // Update lightness range overlays
+            const lightOverlayLeft = document.getElementById('lightOverlayLeft');
+            const lightOverlayRight = document.getElementById('lightOverlayRight');
+            const lMin = parseFloat(lightMin.value);
+            const lMax = parseFloat(lightMax.value);
+            const lightWidthPercent = (100 / 100);
+
+            let lLeftPercent = lMin * lightWidthPercent;
+            let lRightPercent = 100 - (lMax * lightWidthPercent);
+
+            lightOverlayLeft.style.width = lLeftPercent + '%';
+            lightOverlayRight.style.width = lRightPercent + '%';
         }
 
         // Reset filters
