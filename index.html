@@ -115,7 +115,7 @@
         }
 
         .hue-gradient-bar {
-            height: 8px;
+            height: 20px;
             border-radius: 3px;
             background: linear-gradient(
                 to right,
@@ -133,19 +133,26 @@
                 hsl(330, 100%, 50%),
                 hsl(360, 100%, 50%)
             );
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
-        .hue-range-highlight {
+        .hue-range-overlay {
             position: absolute;
             height: 100%;
-            background: rgba(0, 255, 0, 0.3);
-            border-left: 2px solid #0f0;
-            border-right: 2px solid #0f0;
-            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.6);
             pointer-events: none;
             transition: all 0.05s linear;
+        }
+
+        .hue-range-overlay-left {
+            left: 0;
+        }
+
+        .hue-range-overlay-right {
+            right: 0;
         }
 
         input[type="range"] {
@@ -327,7 +334,8 @@
                         </div>
                     </div>
                     <div class="hue-gradient-bar">
-                        <div class="hue-range-highlight" id="hueHighlight"></div>
+                        <div class="hue-range-overlay hue-range-overlay-left" id="hueOverlayLeft"></div>
+                        <div class="hue-range-overlay hue-range-overlay-right" id="hueOverlayRight"></div>
                     </div>
                     <div class="slider-inputs">
                         <input type="range" id="hueMin" min="0" max="360" value="0">
@@ -575,17 +583,18 @@
             document.getElementById('lightMinVal').textContent = lightMin.value;
             document.getElementById('lightMaxVal').textContent = lightMax.value;
 
-            // Update hue range highlight
-            const hueHighlight = document.getElementById('hueHighlight');
+            // Update hue range overlays
+            const overlayLeft = document.getElementById('hueOverlayLeft');
+            const overlayRight = document.getElementById('hueOverlayRight');
             const hMin = parseFloat(hueMin.value);
             const hMax = parseFloat(hueMax.value);
-            const hueHighlightPercent = (100 / 360);
+            const hueWidthPercent = (100 / 360);
 
-            const leftPercent = hMin * hueHighlightPercent;
-            const rightPercent = 100 - (hMax * hueHighlightPercent);
+            const leftPercent = hMin * hueWidthPercent;
+            const rightPercent = 100 - (hMax * hueWidthPercent);
 
-            hueHighlight.style.left = leftPercent + '%';
-            hueHighlight.style.right = rightPercent + '%';
+            overlayLeft.style.width = leftPercent + '%';
+            overlayRight.style.width = rightPercent + '%';
         }
 
         // Reset filters
