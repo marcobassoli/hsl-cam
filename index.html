@@ -114,6 +114,40 @@
             gap: 10px;
         }
 
+        .hue-gradient-bar {
+            height: 8px;
+            border-radius: 3px;
+            background: linear-gradient(
+                to right,
+                hsl(0, 100%, 50%),
+                hsl(30, 100%, 50%),
+                hsl(60, 100%, 50%),
+                hsl(90, 100%, 50%),
+                hsl(120, 100%, 50%),
+                hsl(150, 100%, 50%),
+                hsl(180, 100%, 50%),
+                hsl(210, 100%, 50%),
+                hsl(240, 100%, 50%),
+                hsl(270, 100%, 50%),
+                hsl(300, 100%, 50%),
+                hsl(330, 100%, 50%),
+                hsl(360, 100%, 50%)
+            );
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hue-range-highlight {
+            position: absolute;
+            height: 100%;
+            background: rgba(0, 255, 0, 0.3);
+            border-left: 2px solid #0f0;
+            border-right: 2px solid #0f0;
+            border-radius: 3px;
+            pointer-events: none;
+            transition: all 0.05s linear;
+        }
+
         input[type="range"] {
             flex: 1;
             height: 6px;
@@ -291,6 +325,9 @@
                             <span>-</span>
                             <span id="hueMaxVal">360</span>
                         </div>
+                    </div>
+                    <div class="hue-gradient-bar">
+                        <div class="hue-range-highlight" id="hueHighlight"></div>
                     </div>
                     <div class="slider-inputs">
                         <input type="range" id="hueMin" min="0" max="360" value="0">
@@ -537,6 +574,18 @@
             document.getElementById('satMaxVal').textContent = satMax.value;
             document.getElementById('lightMinVal').textContent = lightMin.value;
             document.getElementById('lightMaxVal').textContent = lightMax.value;
+
+            // Update hue range highlight
+            const hueHighlight = document.getElementById('hueHighlight');
+            const hMin = parseFloat(hueMin.value);
+            const hMax = parseFloat(hueMax.value);
+            const hueHighlightPercent = (100 / 360);
+
+            const leftPercent = hMin * hueHighlightPercent;
+            const rightPercent = 100 - (hMax * hueHighlightPercent);
+
+            hueHighlight.style.left = leftPercent + '%';
+            hueHighlight.style.right = rightPercent + '%';
         }
 
         // Reset filters
